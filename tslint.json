@@ -75,7 +75,8 @@
     "no-unused-expression": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
-    "object-literal-sort-keys": false,
+    "object-literal-sort-keys": true,
+    "ordered-imports": true,
     "one-line": [
       true,
       "check-open-brace",
@@ -91,7 +92,7 @@
     "radix": true,
     "semicolon": [
       true,
-      "always"
+      "never"
     ],
     "triple-equals": [
       true,
