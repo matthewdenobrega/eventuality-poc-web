@@ -1,13 +1,11 @@
-import { IStatement } from './statement.interface'
+import { Injectable } from '@angular/core'
+import { IStatement } from '../../xapi/statement.interface'
 
 const activityDefinitionDataExtension = 'http://eventuality.poc/xapi/object/extensions/data'
 
-export class StatementUtilities {
-    static clone(statement: IStatement) {
-        return JSON.parse(JSON.stringify(statement))
-    }
-
-    static create(objectId: string, verbId: string, data?: any): IStatement {
+@Injectable()
+export class StatementFactory {
+    create(objectId: string, verbId: string, data?: any): IStatement {
         const statement: IStatement = {
             actor: {
                 'mbox': 'mailto:matt.denobrega@gmail.com',
@@ -33,7 +31,7 @@ export class StatementUtilities {
         return statement
     }
 
-    static extractData(statement: IStatement) {
+    extractData(statement: IStatement) {
         try {
             return statement.object.definition.extensions[activityDefinitionDataExtension]
         } catch {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Observable, Subject } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
-import { StatementUtilities } from '../../xapi/statement-utilities.class'
+import { clone } from '../../utility/utility'
 import { IStatement } from '../../xapi/statement.interface'
 
 @Injectable()
@@ -20,14 +20,14 @@ export class Channel {
 
     observe(): Observable<IStatement> {
         return this._subject.pipe(
-            map((statement: IStatement) => StatementUtilities.clone(statement)))
+            map((statement: IStatement) => clone(statement)))
     }
 
-    observeVerb(verb: string): Observable<IStatement> {
+    observeVerbs(verbs: string[]): Observable<IStatement> {
         return this.observe().pipe(
-            filter((statement: IStatement) => statement.verb.id === verb ))
+            filter((statement: IStatement) => verbs.includes(statement.verb.id) ))
     }
 }
 
-export class ChannelDecision extends Channel {}
-export class ChannelPerception extends Channel {}
+export class DecisionChannel extends Channel {}
+export class PerceptionChannel extends Channel {}

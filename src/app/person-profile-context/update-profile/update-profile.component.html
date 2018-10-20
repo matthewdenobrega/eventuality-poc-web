@@ -1,7 +1,9 @@
 <h2>Edit your name</h2>
 
-<p>Saved name: {{nameSaved}}</p>
+<div *ngIf="person">
+  <p>Id: {{person.id}}</p>
+  
+  <input [(ngModel)]="person.name"/>
 
-<input [(ngModel)]="name"/>
-
-<button (click)="send()">SEND</button>
+  <button (click)="send()">SEND</button>
+</div>

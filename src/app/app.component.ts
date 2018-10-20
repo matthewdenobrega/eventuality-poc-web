@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { TransportAdapterWebsocketService } from './common/service/transport-adapter/transport-adapter-websocket.service'
+import { TransportAdapterWebsocket } from './shared/injectable/transport-adapter/transport-adapter-websocket.injectable'
 
 @Component({
   selector: 'app-root',
@@ -7,8 +7,6 @@ import { TransportAdapterWebsocketService } from './common/service/transport-ada
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'EventualityPOCWeb'
-
   // Constructor
-  constructor(private transportAdapterWebsocketService: TransportAdapterWebsocketService) {}
+  constructor(private _transportAdapterWebsocket: TransportAdapterWebsocket) {}
 }

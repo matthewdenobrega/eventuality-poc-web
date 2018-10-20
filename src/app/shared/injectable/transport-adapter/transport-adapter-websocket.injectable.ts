@@ -1,37 +1,37 @@
 import { Injectable } from '@angular/core'
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr'
 import { IStatement } from '../../xapi/statement.interface'
-import { ChannelDecision, ChannelPerception } from '../channel/channel.service'
+import { DecisionChannel, PerceptionChannel } from '../channel/channel.injectable'
 
 @Injectable()
-export class TransportAdapterWebsocketService {
+export class TransportAdapterWebsocket {
     private _connection: HubConnection
+    private _connected = false
+    private _pending: IStatement[] = []
 
     // Constructor
-    constructor(private _channelDecision: ChannelDecision, private _channelPerception: ChannelPerception) {
+    constructor(private _decisionChannel: DecisionChannel, private _perceptionChannel: PerceptionChannel) {
         this._connection = new HubConnectionBuilder().withUrl('https://localhost:44380/eventHub').build()
 
         this._connection.start().then(() => {
-            console.log('Websocket connected')
+            this._connected = true
+            this._pending.forEach(statement => this.send(statement))
         }, (err) => {
             console.error(err.toString())
+            this._connected = false
         })
 
-        this._channelPerception.observe().forEach((statement: IStatement) => {
-            this.send(statement)
+        this._perceptionChannel.observe().forEach((statement: IStatement) => {
+            this._connected ? this.send(statement) : this._pending.push(statement)
         })
 
         this._connection.on('Decision', (message: IStatement) => {
-            console.log('Message received from hub')
-
-            this._channelDecision.next(message)
+            this._decisionChannel.next(message)
         })
     }
 
     // Public
     public send(statement: IStatement) {
-        console.log('Sending to Perception')
-        console.dir(statement)
         this._connection.send('Perception', statement)
     }
 }
