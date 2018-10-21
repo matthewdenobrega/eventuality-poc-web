@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { IStatement } from '../../xapi/statement.interface'
 
-const activityDefinitionDataExtension = 'http://eventuality.poc/xapi/object/extensions/data'
+const activityDefinitionDataExtension = 'http://eventuality.poc/xapi/object/extension/data'
 
 @Injectable()
 export class StatementFactory {
@@ -12,6 +12,11 @@ export class StatementFactory {
                 'name': 'Matthew de Nobrega',
                 'objectType': 'Agent'
             },
+            /*context: {
+                extensions: {
+
+                }
+            }*/
             object: {
                 id: objectId
             },

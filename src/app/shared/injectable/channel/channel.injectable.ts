@@ -6,6 +6,7 @@ import { IStatement } from '../../xapi/statement.interface'
 
 @Injectable()
 export class Channel {
+    protected _channelName: string
     private _subject: Subject<IStatement>
 
     // Constructor
@@ -15,6 +16,7 @@ export class Channel {
 
     // Public
     next(statement: IStatement) {
+        console.log(this._channelName + ' channel: ' + JSON.stringify(statement))
         this._subject.next(statement)
     }
 
@@ -29,5 +31,9 @@ export class Channel {
     }
 }
 
-export class DecisionChannel extends Channel {}
-export class PerceptionChannel extends Channel {}
+export class DecisionChannel extends Channel {
+    _channelName = 'Decision'
+}
+export class PerceptionChannel extends Channel {
+    _channelName = 'Perception'
+}

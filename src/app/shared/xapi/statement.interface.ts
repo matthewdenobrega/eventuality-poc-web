@@ -13,8 +13,17 @@ export interface IActor {
     objectType: string
 }
 
+export interface IContext {
+    statement: IStatementReference
+}
+
+export interface IStatementReference {
+    id: string
+}
+
 export interface IStatement {
     actor: IActor
+    context?: IContext
     object: IActivity
     verb: IVerb
 }

@@ -2,7 +2,7 @@ import { Component, Version } from '@angular/core'
 import { DecisionChannel, PerceptionChannel } from '../../shared/injectable/channel/channel.injectable'
 import { StatementFactory } from '../../shared/injectable/statement-factory/statement-factory.injectable'
 import { IStatement } from '../../shared/xapi/statement.interface'
-import { Verbs } from '../../shared/xapi/verbs.enum'
+import { Verb } from '../../shared/xapi/verb.enum'
 import { Person } from './update-profile.class'
 
 @Component({
@@ -10,33 +10,26 @@ import { Person } from './update-profile.class'
     templateUrl: './update-profile.component.html'
 })
 export class UpdateProfileComponent {
-    person: Person
-    personId: string
+    person: Person = new Person()
 
     // Constructor
     constructor(private _channelDecision: DecisionChannel,
         private _channelPerception: PerceptionChannel,
         private _statementFactory: StatementFactory
     ) {
-        this.personId = 'http://eventuality.poc/person/1'
-
-        const personChangedVerbs = [Verbs.PersonRetrieved, Verbs.PersonUpdated]
+        const personChangedVerbs = [Verb.PersonCreated, Verb.PersonRetrieved, Verb.PersonUpdated]
         this._channelDecision.observeVerbs(personChangedVerbs).forEach((statement: IStatement) => {
-            this.person = this._statementFactory.extractData(statement)
+            this.person = this._statementFactory.extractData(statement) || new Person()
+            console.dir(statement)
         })
-
-        this.request()
     }
 
     // Public
     send() {
-        const statement = this._statementFactory.create(this.personId, Verbs.PersonUpdateRequested, this.person)
-        this._channelPerception.next(statement)
-    }
+        const statement = this.person.id ?
+            this._statementFactory.create(this.person.id, Verb.PersonUpdateRequested, this.person) :
+            this._statementFactory.create('http://eventuality.poc/person', Verb.PersonCreationRequested, this.person)
 
-    // Private
-    private request() {
-        const statement = this._statementFactory.create(this.personId, Verbs.PersonRequested)
         this._channelPerception.next(statement)
     }
 }
