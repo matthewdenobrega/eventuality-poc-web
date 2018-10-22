@@ -22,6 +22,11 @@ export class UpdateProfileComponent {
             this.person = this._statementFactory.extractData(statement) || new Person()
             console.dir(statement)
         })
+
+        const failureVerbs = [Verb.PersonCreationFailed, Verb.PersonUpdateFailed]
+        this._channelDecision.observeVerbs([Verb.PersonCreationFailed]).forEach((statement: IStatement) => {
+            alert('There was an error saving your information.')
+        })
     }
 
     // Public
