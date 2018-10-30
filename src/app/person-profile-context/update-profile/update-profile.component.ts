@@ -19,8 +19,8 @@ export class UpdateProfileComponent {
     ) {
         const personChangedVerbs = [Verb.PersonCreated, Verb.PersonRetrieved, Verb.PersonUpdated]
         this._channelDecision.observeVerbs(personChangedVerbs).forEach((statement: IStatement) => {
-            this.person = this._statementFactory.extractData(statement) || new Person()
-            console.dir(statement)
+            this.person = this._statementFactory.extractData(statement)
+            console.log('Person updated')
         })
 
         const failureVerbs = [Verb.PersonCreationFailed, Verb.PersonUpdateFailed]
